@@ -1,0 +1,26 @@
+version: '2.3'
+
+services:
+  varnish:
+    build:
+      context: varnish/
+    expose:
+      - "80"
+    volumes:
+      - lib:/var/lib/varnish
+    depends_on:
+      - test-backend
+
+  test-backend:
+    build:
+      context: test-backend/
+    expose:
+      - "3000"
+
+  k6:
+    image: loadimpact/k6
+    volumes:
+      - .:/app
+
+volumes:
+  lib:
